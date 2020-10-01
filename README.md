@@ -1,4 +1,4 @@
-# Web Starter Project
+# Web 2 TA Beth In Class
 A foundational app for building with Express and Create React App.
 Inspired by a desire to set my students up to win for my courses.
 
