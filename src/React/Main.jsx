@@ -1,13 +1,14 @@
 import React from 'react';
 
 /* Components ---------------------------*/
-import Test from './Test.jsx';
+import Homework from './Homework/Homework.jsx';
 
 const Main = () => {
 
     return (
         <div className='Main'>
-            <Test />
+            <h1>In Class</h1>
+            <Homework />
         </div>
     );
 }
