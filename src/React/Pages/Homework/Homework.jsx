@@ -2,13 +2,16 @@ import React from 'react';
 import styled from 'styled-components';
 
 /* Components ---------------------------*/
-import Essays from './Essays.jsx'
+import Essays from './Essays.jsx';
+import Template from '../../Shared/Template.jsx';
+
 
 const Homework = () => {
     return (
         <HomeworkStyled>
-            <h2>Homework</h2>
-            <Essays essays={ essays }/>
+            <Template title='Welcome' aside={ false }>
+                <Essays essays={ essays }/>
+            </Template> 
         </HomeworkStyled>
     )
 }
