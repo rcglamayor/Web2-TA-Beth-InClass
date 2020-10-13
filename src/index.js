@@ -9,6 +9,7 @@ import 'react-app-polyfill/stable';
 ---------------------------*/
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { Provider } from 'react-redux';
 
 /*---------------------------
 | Components
@@ -16,6 +17,19 @@ import ReactDOM from 'react-dom';
 import Main from './React/Main.jsx';
 
 /*---------------------------
+| Add Redux to Our App
+---------------------------*/
+import configureStore from './Redux/configureStore.js';
+
+const ReactRedux = () => {
+    return (
+        <Provider store={ configureStore() }>
+            <Main />
+        </Provider>
+    )
+}
+
+/*---------------------------
 | Render to DOM
 ---------------------------*/
-ReactDOM.render(<Main />, document.getElementById('root'));
+ReactDOM.render(<ReactRedux />, document.getElementById('root'));
