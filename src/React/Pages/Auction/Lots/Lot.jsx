@@ -1,39 +1,49 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
-import { useDispatch } from 'react-redux';
 
-/* Scripts ---------------------------*/
-import { addLotToBids, removeLotToBids } from 'Redux/bidManager/actions.js';
+/* Components ---------------------------*/
+import AddRemoveLot from './AddRemoveLot.jsx';
+import Lightbox from 'React/Shared/Lightbox.jsx';
 
 const Lot = ({lot, auctionID}) => {
 
-    const dispatch = useDispatch();
+    const [isOpen, isOpenUpdate] = useState(false);
 
-    const handleOnClick = () => {
-        console.log('clickity-click');
-        dispatch(addLotToBids(lot));
+    const handleOnOpen =() => {
+        console.log('open lightbox');
+        isOpenUpdate(true);
     }
 
-    const handleRemoveLot = () => {
-        console.log('remove');
-        dispatch(removeLotToBids(lot));
+    const handleOnClose = () => {
+        console.log('close lightbox');
+        isOpenUpdate(false);
     }
 
     return (
         <LotStyled className='Lot'>
-            <img src={ `/assets/img/auctions/${auctionID}/lots/small/${lot.images.small}`} alt={lot.title}/>
+            <img 
+                src={ `/assets/img/auctions/${auctionID}/lots/small/${lot.images.small}`} 
+                alt={lot.title}
+                onClick={ handleOnOpen }
+            />
             <h3>{ `Lot: ${lot.number}: ${lot.title}` }</h3>
 
-            <button
-                type='button'
-                onClick={ handleOnClick }
-                >Add Lot
-            </button>
-            <button
-                type='button'
-                onClick={ handleRemoveLot }
-                >Remove Lot
-            </button>
+            <AddRemoveLot lot={ lot } />
+            <Lightbox
+                isOpen={ isOpen }
+                onClose={ handleOnClose }
+                headerText={ `Lot# ${lot.number}: ${lot.title}` }
+            >
+                <img 
+                    src={ `/assets/img/auctions/${auctionID}/lots/small/${lot.images.small}`} 
+                    alt={lot.title}
+                />
+                <h3>{ `Lot: ${lot.number}: ${lot.title}` }</h3>
+                <div className="artist"><b>Artist:</b> { lot.artist}</div>
+                <div className="medium"><b>Medium:</b> { lot.medium}</div>
+                <AddRemoveLot lot={ lot } />
+            </Lightbox>
+
         </LotStyled>
     );
 }
@@ -50,5 +60,15 @@ const LotStyled = styled.div`
 
     &:hover {
         box-shadow: 0px 0px 7px rgba(0,0,0,.05);
+    }
+
+    .Lightbox {
+        .AddRemoveLot {
+            .Button {
+                display: block;
+                width: 100%;
+                margin: 10px 0px 0px 0px;
+            }
+        }
     }
 `;
