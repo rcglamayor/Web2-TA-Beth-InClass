@@ -7,6 +7,7 @@ import { addLotToBids, removeLotToBids } from 'Redux/bidManager/actions.js';
 
 /* Components ---------------------------*/
 import Button from 'React/Shared/UniversalForm/Controls/Button.jsx';
+import { userAuthUpdate } from 'Redux/user/actions';
 
 const AddRemoveLot = ({ lot }) => {
     // Grab Redux Dispatcher to update store
@@ -35,6 +36,8 @@ const AddRemoveLot = ({ lot }) => {
         console.log('remove');
         dispatch(removeLotToBids(lot));
     }
+
+    if (!userAuthUpdate.isLoggedIn) { return ''; }
 
     return (
         <AddRemoveLotStyled className='AddRemoveLot'>

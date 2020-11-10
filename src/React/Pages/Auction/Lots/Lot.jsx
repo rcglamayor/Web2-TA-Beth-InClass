@@ -27,7 +27,6 @@ const Lot = ({lot, auctionID}) => {
                 onClick={ handleOnOpen }
             />
             <h3>{ `Lot: ${lot.number}: ${lot.title}` }</h3>
-
             <AddRemoveLot lot={ lot } />
             <Lightbox
                 isOpen={ isOpen }

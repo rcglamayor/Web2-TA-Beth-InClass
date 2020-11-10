@@ -1,10 +1,23 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import styled from 'styled-components';
 
-const Form = ({children, onSubmit}) => {
+/* Context ---------------------------*/
+import Context from './context/index.js';
+import * as UFActions from './context/actions.js';
+
+const Form = ({children}) => {
+    /*---------------------------
+    | State and Props
+    ---------------------------*/
+    const { state, dispatch } = useContext(Context);
+
+    const handleOnSubmit = (e) => {
+        e.preventDefault();
+        UFActions.handleOnSubmit(state, dispatch);
+    }
 
     return (
-        <FormStyled onSubmit={onSubmit} className='Form'>
+        <FormStyled onSubmit={handleOnSubmit} className='Form'>
             {children} 
         </FormStyled>
     );

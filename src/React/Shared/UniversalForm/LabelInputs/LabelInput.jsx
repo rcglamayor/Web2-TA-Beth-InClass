@@ -1,15 +1,30 @@
 import React from 'react';
 import styled from 'styled-components';
 
-const LabelInput = ({children, label, formField}) => {
+/* Component ---------------------------*/
+import Input from '../Controls/Input.jsx';
+import Textarea from '../Controls/Textarea.jsx';
+
+const LabelInput = ({formField}) => {
+
+    let ControlComponent;
+
+    switch (formField.type) {
+        case 'textarea':
+            ControlComponent = Textarea;
+            break;
+        default:
+            ControlComponent = Input;
+            break
+    }
 
     return (
         <LabelInputStyled className='LabelInput'>
             <div className="label-container">
-                <label htmlFor={ formField.id }>{label}</label>
+                <label htmlFor={ formField.id }>{formField.label}</label>
             </div>
             <div className="control">
-                {children}
+                <ControlComponent formField={ formField }/>
             </div>
         </LabelInputStyled>
     );

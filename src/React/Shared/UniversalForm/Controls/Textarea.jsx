@@ -5,8 +5,7 @@ import styled from 'styled-components';
 import Context from '../context/index.js';
 import * as UFActions from '../context/actions.js';
 
-const Input = ({formField}) => {
-
+const Textarea = ({formField}) => {
     const { state, dispatch } = useContext(Context);
 
     const {
@@ -19,7 +18,7 @@ const Input = ({formField}) => {
     }
 
     return (
-        <InputStyled 
+        <TextareaStyled className='Textarea'
             className='Input'
             id={ formField.id }
             name={ formField.id }
@@ -30,12 +29,13 @@ const Input = ({formField}) => {
     );
 }
 
-export default Input;
+export default Textarea;
 
-const InputStyled = styled.input`
+const TextareaStyled = styled.textarea`
     background-color: #fff;
     font-size: 16px;
     padding: 5px 10px;
     border: solid 1px #999;
     width: 100%;
+    height: 200px;
 `;
