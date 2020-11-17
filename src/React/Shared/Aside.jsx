@@ -10,8 +10,8 @@ const Aside = () => {
 
     return (
         <AsideStyled className='Aside'>
-            <img src={ `/assets/img/auctions/${auction.id}/auction.jpg` } alt={ auction.title } />
-            <h2>{ auction.title }</h2> 
+            <img src={ `/assets/img/auctions/${auction.current.id}/auction.jpg` } alt={ auction.title } />
+            <h2>{ auction.current.title }</h2> 
         </AsideStyled>
     );
 }

@@ -18,11 +18,13 @@ const Main = () => {
 
     const dispatch = useDispatch();
 
+    const { auction } = useSelector((state) => state);
+
     useEffect(() => {
         dispatch(AuctionActions.loadAuctions());
     }, [dispatch]);
 
-    return 'hello';
+    if (_.isEmpty(auction.current)) { return 'Preloading...' }
 
     console.log('Main');
 

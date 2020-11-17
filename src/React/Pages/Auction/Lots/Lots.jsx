@@ -16,11 +16,11 @@ const Lots = () => {
             <h2>Lots</h2>
             <div className="lots-container">
                 {
-                    auction.lots.map((lot, idx) => {
+                    auction.current.lots.map((lot, idx) => {
                         return <Lot
                                     key={ idx }
                                     lot={ lot }
-                                    auctionID={ auction.id }
+                                    auctionID={ auction.current.id }
                                 />
                     })
                 }

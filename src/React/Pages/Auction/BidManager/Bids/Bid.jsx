@@ -1,4 +1,4 @@
-import { faHandMiddleFinger } from '@fortawesome/free-solid-svg-icons';
+import { faHandPointRight } from '@fortawesome/free-solid-svg-icons';
 import React from 'react';
 import styled from 'styled-components';
 import { useDispatch } from 'react-redux';

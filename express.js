@@ -71,10 +71,7 @@ if (process.env.NODE_ENV === 'local') {
 ---------------------------*/
 const routes = require('./express-routes/index.js');
 app.use('/api/auctions', routes.auctions);
-app.use('/api/services', routes.services);
-app.use('/api/slides', routes.slides);
-app.use('/api/email', routes.email);
-app.use('/api/login', routes.login);
+app.use('/api/users', routes.users);
 
 // Catchall for requests that do not match our routing
 app.get('*', (req, res) => {

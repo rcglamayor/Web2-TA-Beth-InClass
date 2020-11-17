@@ -5,20 +5,26 @@ const router = express.Router();
 const responseHandler = require('../common/responseHandler.js');
 
 /* Db Models ---------------------------*/
-const AuctionModel = require('./AuctionModel.js');
+const UserModel = require('./UserModel.js');
 
-router.get('/current', (req,res) => { 
+router.post('/login', (req,res) => { 
+
+    const {
+        email,
+        password
+    } = req.body;
     
-    console.log('Retrieved Current Auction'); 
-
     const RH = responseHandler({
-        title: 'Current Auction',
-        payloadKey: 'currentAuction',
+        title: 'User: Login',
+        payloadKey: 'user',
         routerResp: res,
     });
 
-    AuctionModel
-        .findOne({ status: 'current' })
+    UserModel
+        .findOne({ 
+            email: email,
+            password: password,
+        })
         .then(RH.dbResp)
         .catch(RH.dbError);
 });
