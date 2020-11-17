@@ -1,8 +1,17 @@
-import auction from '../../common/static_data/auction.js';
+import { ActionTypes } from './actionTypes.js';
 
-const auctionReducer = (state = auction, action) => {
+const defaultState = {
+    current: {},
+}
+
+const auctionReducer = (state = defaultState, action) => {
 
     switch(action.type) {
+        case ActionTypes.BM_AUCTIONS_CURRENT_SET:
+            return {
+                ...state,
+                current: action.current,
+            };
         default:
             return state;
     }

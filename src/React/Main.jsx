@@ -1,6 +1,11 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 import styled from 'styled-components';
+import _ from 'lodash';
+
+/* Scripts ---------------------------*/
+import * as AuctionActions from 'Redux/auction/actions.js';
 
 /* Components ---------------------------*/
 import Header from './Shared/Header.jsx';
@@ -10,6 +15,14 @@ import Footer from './Shared/Footer.jsx';
 
 
 const Main = () => {
+
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        dispatch(AuctionActions.loadAuctions());
+    }, [dispatch]);
+
+    return 'hello';
 
     console.log('Main');
 

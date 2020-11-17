@@ -1,5 +1,6 @@
 const auction = {
     id: 64,
+    status: 'current',
     title: 'Spring 2020 Auction',
     date: {
         date: '2020-06-01',

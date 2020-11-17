@@ -14,7 +14,28 @@ require('dotenv').config();
 const path = require('path');
 // require('dotenv').config({ path: './.env.local' });
 const express = require('express');
-const bodyParser = require("body-parser"); //Only way to do POST requests
+const cookieParser = require('cookie-parser');
+const session = require('express-session');
+
+/*---------------------------
+| Mongoose
+---------------------------*/
+const mongoose = require('mongoose');
+mongoose.promise = global.Promise;
+const mongoConn = process.env.MONGO_DB_CONN;
+/* Connecting to Mongo ---------------------------*/
+if (mongoConn) {
+    mongoose
+        .connect(mongoConn,  { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false })
+        .then((res) => {
+            console.log('Mongo: Connection made.');
+        })
+        .catch((err) => {
+            console.log(`Mongoose Connection Error: ${err}`);
+        });
+} else {
+    console.log('Missing MONGO_DB_CONN env var for Mongo connection');
+}
 
 /*---------------------------
 | Initiaize Instance of Express as app
@@ -24,8 +45,8 @@ const app = express();
 /*---------------------------
 | Set Up BodyParser for Post Requests
 ---------------------------*/
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json());
+app.use(cookieParser());
+app.use(express.json());
 
 /*---------------------------
 | Serve the static files from the React app
@@ -49,7 +70,7 @@ if (process.env.NODE_ENV === 'local') {
 | Route Collections
 ---------------------------*/
 const routes = require('./express-routes/index.js');
-app.use('/api/staff', routes.staff);
+app.use('/api/auctions', routes.auctions);
 app.use('/api/services', routes.services);
 app.use('/api/slides', routes.slides);
 app.use('/api/email', routes.email);
