@@ -1,4 +1,5 @@
 import { ActionTypes } from './actionTypes';
+import API from 'common/API.js';
 
 /*===================================
 || 
@@ -8,10 +9,16 @@ import { ActionTypes } from './actionTypes';
 ||  2. data to update in store.
 || 
 ===================================*/
-export const bidsUpdate = (bids) => {
+export const currentUpdate = (current) => {
     return {
-        type: ActionTypes.BM_BIDS_UPDATE,
-        bids: bids,
+        type: ActionTypes.BM_CURRENT_UPDATE,
+        current: current,
+    }
+}
+export const pastUpdate = (past) => {
+    return {
+        type: ActionTypes.BM_PAST_UPDATE,
+        past: past,
     }
 }
 
@@ -20,30 +27,60 @@ export const bidsUpdate = (bids) => {
 || Action Dispatchers
 || 
 ===================================*/
+export const loadUserBids = () => {
+    return (dispatch, getState) => {
+        API.get('/bidSubmission/getBids').then((apiResponse) => {
+            console.log('apiResponse', apiResponse);
+
+            const filtered = filterBids(apiResponse.data.payload.bidSubmissions);
+            dispatch(currentUpdate(filtered.current));
+            dispatch(pastUpdate(filtered.past));
+        });
+    }
+}
+
+const filterBids = (bidSubmissions) => {
+    const currentSubmission = bidSubmissions && bidSubmissions.find((bidSub) => {
+        return bidSub.status === 'draft';
+    });
+
+    const current = (currentSubmission) ? currentSubmission : {};
+
+    const past = bidSubmissions && bidSubmissions.filter((bidSub) => {
+        return bidSub.status !== 'draft';
+    });
+
+    return {
+        current: current,
+        past: past,
+    }
+}
+
+
 export const addLotToBids = (lot) => {
     return (dispatch, getState) => {
 
+        const postData = {
+            lot: lot,
+        }
+
         // grab existing state
-        const { bidManager: { bids } } = getState();
+        const { bidManager: { current: currentBidSubmission } } = getState();
 
-        // cloning
-        let newBids = [...bids];
-
-        // check to see if this bid is already in the bid manager
-        const alreadyExists = newBids.find((newBid) => {
-            return (newBid.lot.id === lot.id);
-        });
-
-        // if it does not already exist, add it to our bids.
-        if (!alreadyExists) {
-            newBids.push({
-                lot: lot,
-                low: 0,
-                high: 0,
+        if (!currentBidSubmission.bids) {
+            API.post('/bidSubmission/addLot', postData).then((apiResponse) => {
+                dispatch(currentUpdate(apiResponse.data.payload.bidSubmission));
+            });
+        } else {
+            const alreadyExists = currentBidSubmission.bids && currentBidSubmission.bids.find((currBid) => {
+                return (currBid.lot.id === lot.id);
             });
 
-            // trigger action creator with new bids
-            return dispatch(bidsUpdate(newBids));
+            if (!alreadyExists) {
+                API.post('/bidSubmission/addLot', postData).then((apiResponse) => {
+                    dispatch(currentUpdate(apiResponse.data.payload.bidSubmission));
+                });
+            }
         }
     }
 }
@@ -53,16 +90,34 @@ export const addLotToBids = (lot) => {
 ---------------------------*/
 export const removeLotToBids = (lot) => {
     return (dispatch, getState) => {
+        
+        const postData = {
+            lot: lot,
+        }
 
         // grab existing state
-        const { bidManager: { bids } } = getState();
+        const { bidManager: { current: currentBidSubmission } } = getState();
 
-        // cloning
-        let newBids = bids.filter((bid) => {
-            return (bid.lot.id !== lot.id);
+        API.post('/bidSubmission/removeLot', postData).then((apiResponse) => {
+            currentBidSubmission.bids = currentBidSubmission.bids.filter((bid) => {
+                return bid.lot.id !== lot.id;
+            });
+
+            dispatch(currentUpdate(currentBidSubmission));
         });
 
-        // trigger action creator with new bids
-        return dispatch(bidsUpdate(newBids));
+    }
+}
+
+/*---------------------------
+| Submit Bids
+---------------------------*/
+export const submitBids = (callback) => {
+    return (dispatch, getState) => {
+        API.post('bidSubmission/submitBids').then((apiResponse) => {
+            console.log('submitBids Action:', apiResponse);
+            dispatch(loadUserBids());
+            callback();
+        });
     }
 }

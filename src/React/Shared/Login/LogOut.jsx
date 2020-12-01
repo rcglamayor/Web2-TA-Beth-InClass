@@ -14,7 +14,7 @@ const LogOut = () => {
 
     const handleLogOut = () => {
         console.log('click boom');
-        dispatch(UserActions.userAuthUpdate(false, {}));
+        dispatch(UserActions.logOut());
     }
     return (
         <LogOutStyled className='LogOut'>

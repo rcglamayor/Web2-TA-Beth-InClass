@@ -6,6 +6,7 @@ import _ from 'lodash';
 
 /* Scripts ---------------------------*/
 import * as AuctionActions from 'Redux/auction/actions.js';
+import * as UserActions from 'Redux/user/actions.js';
 
 /* Components ---------------------------*/
 import Header from './Shared/Header.jsx';
@@ -22,6 +23,7 @@ const Main = () => {
 
     useEffect(() => {
         dispatch(AuctionActions.loadAuctions());
+        dispatch(UserActions.loadUser());
     }, [dispatch]);
 
     if (_.isEmpty(auction.current)) { return 'Preloading...' }

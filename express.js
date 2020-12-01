@@ -12,7 +12,6 @@ require('dotenv').config();
 | Resources
 ---------------------------*/
 const path = require('path');
-// require('dotenv').config({ path: './.env.local' });
 const express = require('express');
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
@@ -38,19 +37,24 @@ if (mongoConn) {
 }
 
 /*---------------------------
-| Initiaize Instance of Express as app
+| Express
 ---------------------------*/
+/* Initialize ---------------------------*/
 const app = express();
 
-/*---------------------------
-| Set Up BodyParser for Post Requests
----------------------------*/
-app.use(cookieParser());
+/* JSON support for request response ---------------------------*/
 app.use(express.json());
 
-/*---------------------------
-| Serve the static files from the React app
----------------------------*/
+/* Server Session support user access. ---------------------------*/
+// initialize cookie-parser to allow us access the cookies stored in the browser. 
+app.use(cookieParser());
+app.use(session({ 
+    secret: "Secret Unique Value",
+    resave: false,
+    saveUninitialized: true,
+}));
+
+/* Serve the static files from the React app ---------------------------*/
 app.use(express.static(path.join(__dirname, 'build')));
 
 /*---------------------------
@@ -72,6 +76,7 @@ if (process.env.NODE_ENV === 'local') {
 const routes = require('./express-routes/index.js');
 app.use('/api/auctions', routes.auctions);
 app.use('/api/users', routes.users);
+app.use('/api/bidSubmission', routes.bidSubmission);
 
 // Catchall for requests that do not match our routing
 app.get('*', (req, res) => {
@@ -89,6 +94,14 @@ const FINAL_PORT = (PORT) ? PORT : 5000; // In case none are provided fall back 
 /*---------------------------
 | Start the Server
 ---------------------------*/
-app.listen(FINAL_PORT, () => { 
+app.listen(FINAL_PORT, () => {
     console.log('Express Server is up and running. Currently listening on port: ' + FINAL_PORT ); 
+});
+
+process.on('exit', function () {
+    mongoose.connection.close().then((res) => {
+        console.log('Mongo: Connection Closed.', res);
+    });
+
+    process.emit('cleanup');
 });
