@@ -14,7 +14,7 @@ const BidManager = () => {
             BidManager
 
             {
-                bids && bids.length > 0
+                (bids && bids.length > 0)
                 ? <Bids bids={ bids } />
                 : 'Currently you have no lots in your Bid Manager.'
             }

@@ -1,5 +1,6 @@
 import { ActionTypes } from './actionTypes';
 import API from 'common/API.js';
+import * as BidManagerActions from '../bidManager/actions.js';
 
 /*===================================
 || 
@@ -31,6 +32,7 @@ export const loadUser = () => {
             const profile = apiResponse.data.payload.user;
 
             dispatch(userAuthUpdate(isLoggedIn, profile));
+            dispatch(BidManagerActions.loadUserBids());
 
         });
     }
